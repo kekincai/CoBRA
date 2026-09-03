@@ -1,0 +1,21 @@
+[project]
+name = "cobra-web"
+version = "0.1.0"
+description = "Reproducible CoBRA effort estimation and AI impact analysis"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = "MIT"
+dependencies = ["fastapi>=0.116,<1", "uvicorn>=0.35,<1", "numpy>=2.2,<3", "jinja2>=3.1.6,<4", "python-multipart>=0.0.20,<1"]
+[dependency-groups]
+dev = ["pytest>=8.4,<10", "httpx>=0.28,<1", "ruff>=0.12,<1", "openpyxl>=3.1,<4", "xlrd>=2.0,<3"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[tool.hatch.build.targets.wheel]
+packages = ["src/cobra_web"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+[tool.ruff]
+line-length = 100
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
