@@ -43,7 +43,10 @@ const visibleModels = () =>
 const currentModel = () =>
   visibleModels().find((r) => r.id === query.get("model")) ||
   visibleModels()[0];
-const currentDrivers = () => state.drivers[0];
+const currentDrivers = () =>
+  mode === "sample"
+    ? state.drivers.find((r) => r.id === "ipa-template")
+    : state.drivers[0];
 const visibleEstimates = () =>
   state.estimates.filter((r) =>
     mode === "sample" ? !isCompany(r) : isCompany(r),
@@ -447,12 +450,14 @@ function driversPage() {
       "COST DRIVER MODEL",
       "コストドライバー",
       "Level の判定基準と熟練者の評価を、モデルの知識として保存します。",
-      btn("＋ ドライバーを追加", "new-driver", true),
+      mode === "company" ? btn("＋ ドライバーを追加", "new-driver", true) : "",
     ) +
     `<div class="model-bar"><div><div class="model-name">${esc(ds.data.name)}</div><div class="model-meta">${esc(ds.id)} · ${date(ds.created_at)}</div></div><span class="badge neutral">${ds.data.drivers.filter((d) => d.enabled).length} active drivers</span></div>` +
-    (ds.id === "ipa-template"
-      ? '<div class="notice info">IPA 公開値を初期テンプレートとして表示しています。組織の熟練者で確認し、編集すると新しい版として保存されます。</div>'
-      : "") +
+    (mode === "sample"
+      ? '<div class="notice info">公開サンプルの定義と評価は読み取り専用です。組織の評価を編集する場合は「自社データ」に切り替えてください。</div>'
+      : ds.id === "ipa-template"
+        ? '<div class="notice info">IPA 公開値を初期テンプレートとして表示しています。組織の熟練者で確認し、編集すると新しい版として保存されます。</div>'
+        : "") +
     panel(
       "要因と最大影響量",
       "Level 3 の増加率。個別熟練者の 3 値をそれぞれ等重みで平均します。",
@@ -461,13 +466,13 @@ function driversPage() {
         ds.data.drivers.map((d, i) => {
           const avg = (k) =>
             d.experts.reduce((s, e) => s + e[k], 0) / d.experts.length;
-          return `<tr><td><span class="driver-number">${String(i + 1).padStart(2, "0")}</span>${esc(d.name)}</td><td><span class="badge ${d.enabled ? "neutral" : "warm"}">${d.enabled ? "有効" : "無効"}</span></td><td>${percent(avg("minimum"))}</td><td>${percent(avg("mode"))}</td><td>${percent(avg("maximum"))}</td><td>${d.experts.length} 名</td><td><button class="table-link" data-action="edit-driver" data-id="${esc(d.id)}">定義・評価を編集 ↗</button></td></tr>`;
+          return `<tr><td><span class="driver-number">${String(i + 1).padStart(2, "0")}</span>${esc(d.name)}</td><td><span class="badge ${d.enabled ? "neutral" : "warm"}">${d.enabled ? "有効" : "無効"}</span></td><td>${percent(avg("minimum"))}</td><td>${percent(avg("mode"))}</td><td>${percent(avg("maximum"))}</td><td>${d.experts.length} 名</td><td><button class="table-link" data-action="edit-driver" data-id="${esc(d.id)}">${mode === "sample" ? "定義・評価を確認 ↗" : "定義・評価を編集 ↗"}</button></td></tr>`;
         }),
       ),
     ) +
-    `<details><summary>保存済みの Driver / Expert Assessment 版 (${state.drivers.length})</summary>${table(
+    `<details><summary>保存済みの Driver / Expert Assessment 版 (${mode === "sample" ? 1 : state.drivers.length})</summary>${table(
       ["版", "名前", "保存日時"],
-      state.drivers.map(
+      (mode === "sample" ? [ds] : state.drivers).map(
         (r) =>
           `<tr><td class="mono">${esc(r.id)}</td><td>${esc(r.data.name)}</td><td>${date(r.created_at)}</td></tr>`,
       ),
@@ -478,6 +483,21 @@ function expertRow(e = { name: "", minimum: 0, mode: 0, maximum: 0 }) {
   return `<tr class="expert-row"><td><input name="expert_name" value="${esc(e.name)}" aria-label="評価者名" required></td>${["minimum", "mode", "maximum"].map((k) => `<td><input name="expert_${k}" type="number" value="${e[k] * 100}" aria-label="${k} / %" min="0" step="any" required></td>`).join("")}<td><button type="button" class="table-link" data-action="remove-row">削除</button></td></tr>`;
 }
 function driverEditor(id) {
+  if (mode === "sample") {
+    const d = currentDrivers().data.drivers.find((d) => d.id === id);
+    if (!d) return;
+    openDialog(
+      d.name,
+      `<p class="subtitle">${esc(d.description)}</p>${table(
+        ["Level", "判定条件"],
+        d.levels.map(
+          (text, i) =>
+            `<tr><td>L${i}</td><td class="driver-detail">${esc(text)}</td></tr>`,
+        ),
+      )}<p class="source-note">IPA 公開サンプル · 読み取り専用</p>`,
+    );
+    return;
+  }
   const d = currentDrivers().data.drivers.find((d) => d.id === id) || {
     id: "",
     name: "",
@@ -911,7 +931,7 @@ function aiPage() {
 }
 function impactHTML(rec) {
   const r = rec.data.result;
-  return `<div class="kpis">${kpi("Baseline 工数", number(r.baseline.effort), "人月")}${kpi("AI 適用後工数", number(r.after.effort), "人月", `削減率 ${percent(r.effort_reduction_rate)}`, true)}${kpi("原価差額", yen(r.benefit), "", "追加投資を差し引く前")}${kpi("AI ROI", r.roi === null ? "—" : percent(r.roi), "", r.roi === null ? "追加投資が 0 のため算出不可" : "追加投資を差し引いた便益 / 投資")}</div><div class="grid-2">${panel("工程別の工数比較", "Baseline / AI 適用後", '<div id="ai-chart" class="chart tall"></div>', '<div class="legend"><span><i class="gray"></i>Baseline</span><span><i></i>AI</span></div>')}${panel(
+  return `<div class="kpis">${kpi("Baseline 工数", number(r.baseline.effort), "人月")}${kpi("AI 適用後工数", number(r.after.effort), "人月", `削減率 ${percent(r.effort_reduction_rate)}`, true)}${kpi("原価差額", number(r.benefit / 10000), "万円", "追加投資を差し引く前")}${kpi("AI ROI", r.roi === null ? "—" : percent(r.roi), "", r.roi === null ? "追加投資が 0 のため算出不可" : "追加投資を差し引いた便益 / 投資")}</div><div class="grid-2">${panel("工程別の工数比較", "Baseline / AI 適用後", '<div id="ai-chart" class="chart tall"></div>', '<div class="legend"><span><i class="gray"></i>Baseline</span><span><i></i>AI</span></div>')}${panel(
     "コストと価格",
     `原価に AI 費用 ${yen(r.ai_cost)} を含む`,
     table(
@@ -1057,7 +1077,11 @@ function changeQuery(key, value) {
 
 document.addEventListener("submit", async (event) => {
   const form = event.target;
-  if (!form.getAttribute("id").endsWith("-form") && form.getAttribute("id") !== "benchmark-filter") return;
+  if (
+    !form.getAttribute("id").endsWith("-form") &&
+    form.getAttribute("id") !== "benchmark-filter"
+  )
+    return;
   event.preventDefault();
   const button = $('button[type="submit"]', form);
   const original = button.textContent;

@@ -24,3 +24,9 @@ XML と Excel にはキャッシュ済み MMRE 0.175、STD 0.034、Pred.25 1、�
 
 再実行: `uv run pytest tests/test_engine.py` / `uv run python scripts/verify_algorithm.py`
 詳細: [JSON report](algorithm-verification.json)
+
+## クロスプラットフォーム CI
+
+BLAS の CPU 別の演算順序により、α や誤差指標の最下位桁（例: α の差 1e-19）が変わることがあります。
+`verify_algorithm.py --check` は、出典・設定を一致確認し、計算値を相対 1e-12 / 絶対 1e-15 の許容誤差で照合します。
+この検証はアプリ内の同一環境・全 trial のハッシュ一致検証とは別です。許容誤差を超える変化と出典変更はテストで検出します。

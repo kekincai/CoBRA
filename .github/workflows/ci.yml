@@ -27,9 +27,8 @@ jobs:
       - run: uv run ruff format --check .
       - run: node --check src/cobra_web/static/app.js
       - run: uv run pytest -q
-      - run: uv run python scripts/verify_algorithm.py
-      - name: Check deterministic official-sample result
-        run: git diff --exit-code docs/algorithm-verification.json
+      - name: Check official-sample numerical regression
+        run: uv run python scripts/verify_algorithm.py --check
       - run: uv build
   browser:
     name: browser workflows
