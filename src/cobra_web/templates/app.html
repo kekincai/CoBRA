@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="CoBRA 法による開発工数見積りと AI 導入効果分析。組織の実績から、説明できる見積りへ。">
+  <title>{{ title }} — CoBRA</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="stylesheet" href="/static/app.css?v={{ asset_version }}">
+  <script defer src="/static/vendor/echarts.min.js"></script>
+  <script defer src="/static/app.js?v={{ asset_version }}"></script>
+</head>
+<body data-page="{{ page }}">
+<a href="#workspace" class="skip-link">本文へ移動</a>
+<aside class="sidebar">
+  <a href="/" class="brand" aria-label="CoBRA ホーム"><span class="brand-icon">C<span>↗</span></span><span>CoBRA<small>ESTIMATION WORKSPACE</small></span></a>
+  <div class="workspace-label"><span class="status-dot"></span> Local workspace <span class="local-badge">LOCAL</span></div>
+  <p class="nav-caption">ワークスペース</p>
+  <nav aria-label="メインナビゲーション">
+  {% for path,label in pages.items() %}
+    <a href="/{{ path }}" class="nav-link {% if page==path %}active{% endif %}" {% if page==path %}aria-current="page"{% endif %}><span class="nav-icon" aria-hidden="true">{{ ['◫','▤','≡','⌁','◎','＋','◷','✧','↶'][loop.index0] }}</span>{{ label }}{% if page==path %}<span class="active-dot"></span>{% endif %}</a>
+  {% endfor %}
+  </nav>
+  <div class="sidebar-bottom"><div class="privacy-note"><span class="status-dot"></span>データはこの端末に保存</div><a href="/api/backup" class="quiet-link">バックアップを保存 ↗</a><div class="version">CoBRA Web <span>v{{ version }}</span></div></div>
+</aside>
+<div class="app-frame">
+<header class="topbar"><div class="breadcrumb">Workspace <span>/</span> {{ title }}</div><div class="top-actions"><span class="saved-status">● ローカル保存</span><label class="sr-only" for="workspace-mode">データの種類</label><select id="workspace-mode"><option value="company">自社データ</option><option value="sample">IPA 公開サンプル · 検証</option></select></div></header>
+<main id="workspace" tabindex="-1"><div id="app" aria-live="polite"><div class="loading"><span class="spinner"></span>ワークスペースを読み込み中…</div></div></main>
+<footer class="footer"><span>Cost estimation, Benchmarking and Risk Assessment</span><span>CoBRA method · Reproducible by design</span></footer>
+</div>
+<div id="toast" role="status" class="toast" hidden></div>
+<dialog id="editor"><div class="dialog-header"><h2 id="dialog-title"></h2><button class="icon-button" id="close-dialog" aria-label="閉じる">×</button></div><div id="dialog-body"></div></dialog>
+</body>
+</html>
