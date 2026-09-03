@@ -1,0 +1,20 @@
+name: 機能・仕様の提案
+description: 解決したい課題と受入条件
+title: '[Feature] '
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 解決したい課題
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 期待する結果・受入条件
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: 参考資料・仕様との差分

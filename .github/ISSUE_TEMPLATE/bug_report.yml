@@ -1,0 +1,28 @@
+name: 不具合報告
+description: 再現可能な不具合を報告する
+title: '[Bug] '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: 自社案件・顧客情報・秘密情報を貼り付けないでください。公開サンプルか匿名化した最小入力をご利用ください。
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 再現手順と期待する動作
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の結果・エラー
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Application / Algorithm version、OS、Python version
+  - type: input
+    id: simulation
+    attributes:
+      label: Trial 数・Seed・公開モデルの版

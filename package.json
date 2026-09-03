@@ -1,0 +1,8 @@
+{
+  "name": "cobra-web-checks",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "test:e2e": "playwright test" },
+  "devDependencies": { "@playwright/test": "1.62.1" }
+}

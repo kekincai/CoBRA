@@ -21,3 +21,7 @@ artifacts/
 *.egg-info/
 build/
 dist/
+node_modules/
+.tmp/
+test-results/
+playwright-report/
