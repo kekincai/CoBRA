@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.request import urlopen
 from zipfile import ZipFile
 
+import numpy as np
 import openpyxl
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -115,9 +116,13 @@ def main():
             for sheet, kind in [
                 ("A1-2-1", "sloc_new"),
                 ("A1-2-2", "sloc_enhancement"),
+                ("A2-2-1", "fp_new"),
+                ("A2-2-2", "fp_enhancement"),
                 ("A3-3-8", "phase_new"),
                 ("A3-3-9", "phase_enhancement"),
             ]:
+                if sheet not in book.sheetnames:
+                    continue
                 s = book[sheet]
                 for row in range(3, 8 if kind.startswith("phase") else 4):
                     records.append(
@@ -125,7 +130,9 @@ def main():
                             "industry": industry,
                             "metric": kind,
                             "label": s.cell(row, 7 if kind.startswith("phase") else 6).value,
-                            "unit": "比率" if kind.startswith("phase") else "SLOC/人時",
+                            "unit": "比率"
+                            if kind.startswith("phase")
+                            else ("FP/人時" if kind.startswith("fp") else "SLOC/人時"),
                             "n": s.cell(row, 8).value,
                             "p25": s.cell(row, 10).value,
                             "median": s.cell(row, 11).value,
@@ -136,6 +143,30 @@ def main():
                             "cells": f"H{row}:N{row}",
                         }
                     )
+            for sheet, kind in [("A3-3-1", "duration_new"), ("A3-3-2", "duration_enhancement")]:
+                s = book[sheet]
+                values = [
+                    row[1]
+                    for row in s.iter_rows(min_row=2, max_col=2, values_only=True)
+                    if isinstance(row[0], (int, float)) and isinstance(row[1], (int, float))
+                ]
+                records.append(
+                    {
+                        "industry": industry,
+                        "metric": kind,
+                        "label": "開発期間（公開点データから集計）",
+                        "unit": "月",
+                        "n": len(values),
+                        "p25": float(np.percentile(values, 25)),
+                        "median": float(np.median(values)),
+                        "p75": float(np.percentile(values, 75)),
+                        "mean": float(np.mean(values)),
+                        "workbook": filename,
+                        "sheet": sheet,
+                        "cells": f"B2:B{s.max_row}",
+                        "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values.",
+                    }
+                )
     write(
         "benchmark.json",
         {

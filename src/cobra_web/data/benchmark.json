@@ -174,6 +174,36 @@
       "cells": "H7:N7"
     },
     {
+      "industry": "金融保険業",
+      "metric": "duration_new",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 111,
+      "p25": 8.0,
+      "median": 12.1,
+      "p75": 17.9,
+      "mean": 13.695495495495496,
+      "workbook": "金融保険業_20230117.xlsx",
+      "sheet": "A3-3-1",
+      "cells": "B2:B389",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
+    },
+    {
+      "industry": "金融保険業",
+      "metric": "duration_enhancement",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 104,
+      "p25": 6.074999999999999,
+      "median": 9.1,
+      "p75": 13.125,
+      "mean": 10.229807692307691,
+      "workbook": "金融保険業_20230117.xlsx",
+      "sheet": "A3-3-2",
+      "cells": "B2:B332",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
+    },
+    {
       "industry": "情報通信業",
       "metric": "sloc_new",
       "label": "全体",
@@ -340,6 +370,36 @@
       "workbook": "情報通信業_20230117.xlsx",
       "sheet": "A3-3-9",
       "cells": "H7:N7"
+    },
+    {
+      "industry": "情報通信業",
+      "metric": "duration_new",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 26,
+      "p25": 6.05,
+      "median": 9.3,
+      "p75": 13.75,
+      "mean": 10.623076923076923,
+      "workbook": "情報通信業_20230117.xlsx",
+      "sheet": "A3-3-1",
+      "cells": "B2:B389",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
+    },
+    {
+      "industry": "情報通信業",
+      "metric": "duration_enhancement",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 24,
+      "p25": 4.8,
+      "median": 7.65,
+      "p75": 9.125,
+      "mean": 8.145833333333334,
+      "workbook": "情報通信業_20230117.xlsx",
+      "sheet": "A3-3-2",
+      "cells": "B2:B332",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
     },
     {
       "industry": "製造業",
@@ -510,6 +570,36 @@
       "cells": "H7:N7"
     },
     {
+      "industry": "製造業",
+      "metric": "duration_new",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 59,
+      "p25": 6.199999999999999,
+      "median": 10.5,
+      "p75": 17.35,
+      "mean": 12.24406779661017,
+      "workbook": "製造業_20230117.xlsx",
+      "sheet": "A3-3-1",
+      "cells": "B2:B389",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
+    },
+    {
+      "industry": "製造業",
+      "metric": "duration_enhancement",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 46,
+      "p25": 5.225,
+      "median": 7.6,
+      "p75": 10.225000000000001,
+      "mean": 8.373913043478261,
+      "workbook": "製造業_20230117.xlsx",
+      "sheet": "A3-3-2",
+      "cells": "B2:B332",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
+    },
+    {
       "industry": "業種全体",
       "metric": "sloc_new",
       "label": "全体",
@@ -535,6 +625,34 @@
       "mean": 4.124894032208627,
       "workbook": "本編_20230117.xlsx",
       "sheet": "A1-2-2",
+      "cells": "H3:N3"
+    },
+    {
+      "industry": "業種全体",
+      "metric": "fp_new",
+      "label": "全体",
+      "unit": "FP/人時",
+      "n": 46,
+      "p25": 0.039863484627086415,
+      "median": 0.15125478804448433,
+      "p75": 0.28548995742684596,
+      "mean": 0.2074993140938876,
+      "workbook": "本編_20230117.xlsx",
+      "sheet": "A2-2-1",
+      "cells": "H3:N3"
+    },
+    {
+      "industry": "業種全体",
+      "metric": "fp_enhancement",
+      "label": "全体",
+      "unit": "FP/人時",
+      "n": 35,
+      "p25": 0.06697429900100219,
+      "median": 0.1955043859649123,
+      "p75": 0.3133627789432162,
+      "mean": 0.24170110948763157,
+      "workbook": "本編_20230117.xlsx",
+      "sheet": "A2-2-2",
       "cells": "H3:N3"
     },
     {
@@ -676,6 +794,36 @@
       "workbook": "本編_20230117.xlsx",
       "sheet": "A3-3-9",
       "cells": "H7:N7"
+    },
+    {
+      "industry": "業種全体",
+      "metric": "duration_new",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 312,
+      "p25": 7.175,
+      "median": 12.05,
+      "p75": 18.3,
+      "mean": 13.70448717948718,
+      "workbook": "本編_20230117.xlsx",
+      "sheet": "A3-3-1",
+      "cells": "B2:B389",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
+    },
+    {
+      "industry": "業種全体",
+      "metric": "duration_enhancement",
+      "label": "開発期間（公開点データから集計）",
+      "unit": "月",
+      "n": 276,
+      "p25": 5.775,
+      "median": 8.6,
+      "p75": 12.925,
+      "mean": 9.981159420289853,
+      "workbook": "本編_20230117.xlsx",
+      "sheet": "A3-3-2",
+      "cells": "B2:B332",
+      "transformation": "Non-empty published duration observations; linear quantile, no fitted-curve values."
     }
   ]
 }
